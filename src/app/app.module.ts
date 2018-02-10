@@ -5,11 +5,13 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import {InspectionService} from './http-services/inspection.service';
 import {HttpClientModule} from '@angular/common/http';
+import { MapComponentComponent } from './components/map-component/map-component.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MapComponentComponent
   ],
   imports: [
     BrowserModule,
