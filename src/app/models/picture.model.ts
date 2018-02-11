@@ -1,4 +1,5 @@
 export interface Picture {
-  name:string,
-  url: string
+  business_id: number,
+  date: number,
+  description: string
 }

@@ -3,12 +3,14 @@ import Map = google.maps.Map;
 import {BusinessService} from '../../http-services/business.service';
 import {InspectionService} from '../../http-services/inspection.service';
 import {ViolationService} from '../../http-services/violation.service'
+import {PictureService} from '../../http-services/picture.service'
 import {Business} from '../../models/business.model';
 import Marker = google.maps.Marker;
 import {Inspection} from '../../models/inspection.model';
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/observable/forkJoin";
 import {Violation} from "../../models/violation.model";
+import {Picture} from "../../models/picture.model";
 
 @Component({
   selector: 'app-map',
@@ -19,7 +21,7 @@ export class MapComponent implements OnInit {
 
   private googleMap?: Map;
   @ViewChild('map') mapElement: ElementRef;
-  constructor(private businessService: BusinessService, private inspectionService: InspectionService, private violationService: ViolationService) { }
+  constructor(private businessService: BusinessService, private inspectionService: InspectionService, private violationService: ViolationService, private pictureService: PictureService) { }
 
   ngOnInit() {
     this.googleMap = new google.maps.Map(this.mapElement.nativeElement, {
@@ -28,7 +30,9 @@ export class MapComponent implements OnInit {
     });
 
     this.businessService.getBusinesses().subscribe((businesses) => {
+      this.inspectionService.getInspections()
       for(let business of businesses) {
+
         let marker = new google.maps.Marker({
           position: { lat: business.latitude, lng:  business.longitude },
           map: this.googleMap,
@@ -46,15 +50,17 @@ export class MapComponent implements OnInit {
   public handleMarkerClick(business: Business, marker: Marker) {
     Observable.forkJoin([
       this.inspectionService.getInspections(business.business_id),
-      this.violationService.getViolations(business.business_id)
+      this.violationService.getViolations(business.business_id),
+      this.pictureService.getPicture(business)
     ])
-    .subscribe(([inspections, violations]) => {
+    .subscribe(([inspections, violations, picture]) => {
       let inspectionHtml = this.makeInspectionsListHtml(inspections);
       let violationHtml = this.makeViolationListHtml(violations);
-
+      let imageSrc = 'data:image/jpeg;base64,' + picture;
       let infowindow = new google.maps.InfoWindow({
         content: `
                 <h2>${business.name}</h2>
+                
                 <p>Phone Number: ${business.phone_number}</p>
                
                 <h3>Inspections</h3>
@@ -62,6 +68,8 @@ export class MapComponent implements OnInit {
                 ${inspectionHtml}
                 <h3>Violations</h3>
                 ${violationHtml}
+                </br>
+                <img src="${imageSrc}" />                
               `
       });
       infowindow.open(this.googleMap, marker);
