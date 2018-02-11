@@ -9,6 +9,8 @@ import { MapComponent } from './components/map/map.component';
 import {BusinessService} from './http-services/business.service';
 import {ViolationService} from "./http-services/violation.service";
 import {PictureService} from "./http-services/picture.service";
+import {HeatMapPointsService} from './http-services/heat-map-points.service';
+
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import {PictureService} from "./http-services/picture.service";
     InspectionService,
     BusinessService,
     ViolationService,
-    PictureService
+    PictureService,
+    HeatMapPointsService
   ],
   bootstrap: [AppComponent]
 })
