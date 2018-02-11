@@ -9,6 +9,6 @@ export class BusinessService {
   constructor(private http: HttpClient) {}
 
   public getBusinesses(): Observable<Business[]>{
-    return this.http.get(environment.apiBaseUrl + "businesses");
+    return this.http.get<Business[]>(environment.apiBaseUrl + "businesses");
   }
 }

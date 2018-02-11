@@ -14,7 +14,7 @@ export class InspectionService {
     let params = {};
     if(businessId)
       params['business_id'] = businessId;
-    return this.http.get(environment.apiBaseUrl + 'inspections', {
+    return this.http.get<Inspection[]>(environment.apiBaseUrl + 'inspections', {
       params: params
     })
   }
