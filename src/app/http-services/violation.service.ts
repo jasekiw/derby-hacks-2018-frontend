@@ -5,10 +5,15 @@ import {Observable} from 'rxjs/Observable';
 import {Violation} from '../models/violation.model';
 
 @Injectable()
-export class BusinessService {
-  constructor(private http: HttpClient) {}
+export class ViolationService {
+  public constructor(private http: HttpClient) {}
 
-  public getBusinesses(): Observable<Violation[]>{
-    return this.http.get<Violation[]>(environment.apiBaseUrl + "violation");
+  public getViolations(businessId?: number): Observable<Violation[]> {
+    let params = {};
+    if(businessId)
+      params['business_id'] = businessId;
+    return this.http.get<Violation[]>(environment.apiBaseUrl + 'violation', {
+      params: params
+    })
   }
 }
