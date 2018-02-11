@@ -11,9 +11,9 @@ export class AppComponent implements  OnInit {
   constructor(private inspectionService: InspectionService) {}
   title = 'app';
   ngOnInit(): void {
-    this.inspectionService.getInspections().subscribe((inspections) => {
-      console.log(inspections);
-    })
+    // this.inspectionService.getInspections().subscribe((inspections) => {
+    //   console.log(inspections);
+    // })
   }
 
 }
