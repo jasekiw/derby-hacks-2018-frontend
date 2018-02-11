@@ -83,7 +83,7 @@ export class MapComponent implements OnInit {
     let amountOfPoints = distanceLng / 0.003;
     let radius = screenWidth / amountOfPoints;
     console.log(radius);
-    for(let point: HeatMapPoint of this.points) {
+    for(let point of this.points) {
       let weight = (100 - point.Rating) + 1;
 
       heatMapData.push({location: new google.maps.LatLng(point.Lat, point.Lng), weight: weight});

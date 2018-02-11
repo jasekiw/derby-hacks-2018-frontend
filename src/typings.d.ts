@@ -4,6 +4,3 @@ interface NodeModule {
   id: string;
 }
 
-
-// detect typings for google maps.
-import {} from '@types/googlemaps';
