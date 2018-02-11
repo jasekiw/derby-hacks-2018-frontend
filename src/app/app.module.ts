@@ -8,7 +8,7 @@ import {HttpClientModule} from '@angular/common/http';
 import { MapComponent } from './components/map/map.component';
 import {BusinessService} from './http-services/business.service';
 import {ViolationService} from "./http-services/violation.service";
-
+import {PictureService} from "./http-services/picture.service";
 
 @NgModule({
   declarations: [
@@ -22,7 +22,8 @@ import {ViolationService} from "./http-services/violation.service";
   providers: [
     InspectionService,
     BusinessService,
-    ViolationService
+    ViolationService,
+    PictureService
   ],
   bootstrap: [AppComponent]
 })
