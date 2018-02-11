@@ -42,16 +42,19 @@ export class MapComponent implements OnInit {
     });
 
     this.businessService.getBusinesses().subscribe((businesses) => {
+      let markers = [];
       for(let business of businesses) {
         let marker = new google.maps.Marker({
           position: { lat: business.latitude, lng:  business.longitude },
-          map: this.googleMap,
           icon: '/assets/icons/ic_business_black_24dp_1x.png'
         });
 
-        marker.addListener('click', () => this.handleMarkerClick(business, marker))
-      }
 
+        marker.addListener('click', () => this.handleMarkerClick(business, marker));
+        markers.push(marker );
+      }
+      let markerCluster = new MarkerClusterer(this.googleMap, markers,
+        {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
     });
 
 
