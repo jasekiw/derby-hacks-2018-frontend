@@ -13,6 +13,7 @@ import {Violation} from "../../models/violation.model";
 import {Picture} from "../../models/picture.model";
 import {HeatMapPointsService} from '../../http-services/heat-map-points.service';
 import {HeatMapPoint} from '../../models/heat-map-point.model';
+import {PolygonMapPointsService} from '../../http-services/polygon-map-points.service';
 
 @Component({
   selector: 'app-map',
@@ -23,7 +24,7 @@ export class MapComponent implements OnInit {
 
   private googleMap?: Map;
   @ViewChild('map') mapElement: ElementRef;
-  private points: HeatMapPoint[] = [];
+  private points: any[] = [];
   private heatMap?: google.maps.visualization.HeatmapLayer;
 
   constructor(
@@ -31,7 +32,8 @@ export class MapComponent implements OnInit {
     private inspectionService: InspectionService,
     private heatMapPointsService: HeatMapPointsService,
     private violationService: ViolationService,
-    private pictureService: PictureService
+    private pictureService: PictureService,
+    private polygonService: PolygonMapPointsService
   ) { }
 
   ngOnInit() {
@@ -40,13 +42,14 @@ export class MapComponent implements OnInit {
       zoom: 12
     });
 
-    this.googleMap.addListener('zoom_changed', () => {
-      this.setHeatMap();
-    });
+    // this.googleMap.addListener('zoom_changed', () => {
+    //   this.setHeatMap();
+    // });
 
-    this.heatMapPointsService.getHeatMapPoints().subscribe((points: HeatMapPoint[]) => {
+    this.polygonService.getPolygonMapPoints().subscribe((points) => {
      this.points = points;
-     this.setHeatMap();
+     // this.setHeatMap();
+      this.setPolygon();
     });
 
     this.businessService.getBusinesses().subscribe((businesses) => {
@@ -67,6 +70,49 @@ export class MapComponent implements OnInit {
         {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
     });
 
+
+  }
+
+  public setPolygon() {
+    if(this.points.length == 0)
+      return;
+
+    for(let point of this.points) {
+      let coords = [
+      {lat: point.TopLeftLat, lng: point.TopLeftLng},
+      {lat: point.TopLeftLat, lng: point.BottomRightLng},
+      {lat: point.BottomRightLat, lng: point.BottomRightLng},
+      {lat: point.BottomRightLat, lng: point.TopLeftLng},
+        {lat: point.TopLeftLat, lng: point.TopLeftLng},
+      ];
+      let rating = point.Rating;
+      let green = '#00ff00';
+      let yellowgreen = '#d8ff00';
+      let yellow = '#fff200';
+      let orange = '#ffa100';
+      let red =  '#ff1500';
+
+      let color = red;
+
+      if(rating > 97)
+        color = green;
+      else if(rating > 93)
+        color = yellowgreen;
+      else if(rating > 85)
+        color = yellow;
+      else if(rating > 80)
+        color = orange;
+
+      var polygon = new google.maps.Polygon({
+        paths: coords,
+        strokeColor: color,
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: color,
+        fillOpacity: 0.35
+      });
+      polygon.setMap(this.googleMap);
+    }
 
   }
 

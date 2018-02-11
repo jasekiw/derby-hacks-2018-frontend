@@ -10,6 +10,7 @@ import {BusinessService} from './http-services/business.service';
 import {ViolationService} from "./http-services/violation.service";
 import {PictureService} from "./http-services/picture.service";
 import {HeatMapPointsService} from './http-services/heat-map-points.service';
+import {PolygonMapPointsService} from './http-services/polygon-map-points.service';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import {HeatMapPointsService} from './http-services/heat-map-points.service';
     BusinessService,
     ViolationService,
     PictureService,
-    HeatMapPointsService
+    HeatMapPointsService,
+    PolygonMapPointsService
   ],
   bootstrap: [AppComponent]
 })
